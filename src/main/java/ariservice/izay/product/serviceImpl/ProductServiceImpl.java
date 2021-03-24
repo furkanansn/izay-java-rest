@@ -109,4 +109,16 @@ public class ProductServiceImpl implements ProductService{
 		return combineDto;
 	}
 
+	@Override
+	public Object searchProduct(String query) {
+		
+		Optional<List<Product>> products = Optional.ofNullable(productRepository.searchProduct(query));
+		
+		if(products.isPresent()) {
+			return products;
+		}
+		
+		return null;
+	}
+
 }

@@ -19,4 +19,6 @@ public interface ProductService {
 	
 	Object addProductCategory(AddProductCategory addProductCategory);
 	
+	Object searchProduct(String query);
+	
 }
