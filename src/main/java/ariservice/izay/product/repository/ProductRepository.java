@@ -5,13 +5,12 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import ariservice.izay.product.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long>{
 	
 
-	@Query(value="SELECT * FROM product p WHERE \n"
+	@Query(value="select * from product p where \n"
 			+ "p.name LIKE %:query%\n"
 			+ "OR p.voltage LIKE %:query%\n"
 			+ "OR p.serial_no LIKE %:query%\n"
@@ -20,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 			+ "OR p.structure_tr LIKE %:query%\n"
 			+ "OR p.structure_en LIKE %:query%\n"
 			+ "OR p.technical_info_tr LIKE %:query%\n"
-			+ "OR p.technical_info_en LIKE %:query%")
+			+ "OR p.technical_info_en LIKE %:query%",nativeQuery = true)
 	
 	List<Product> searchProduct(@Param("query") String query);
 	
