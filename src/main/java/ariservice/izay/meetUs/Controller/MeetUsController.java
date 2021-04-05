@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ariservice.izay.io.IoUtil;
 import ariservice.izay.meetUs.dto.AddMeetUsDto;
 import ariservice.izay.meetUs.dto.MeetUsDto;
 import ariservice.izay.meetUs.entity.MeetUs;
@@ -50,6 +51,10 @@ public class MeetUsController {
 
 			MeetUs Meet = modelMapper.map(addMeetDto, MeetUs.class);
 			
+			String imagePathString = IoUtil.decoder(addMeetDto.getImageBase64());
+			
+			Meet.setImagePath(imagePathString);
+			
 			return ResponseEntity.ok(new GeneralResponse(true,repo.save(Meet),""));
 			
 		} catch (Exception e) {
@@ -72,6 +77,15 @@ public class MeetUsController {
 			if(Meet.isPresent()) {
 				MeetUs Meet2 = Meet.get();
 				Meet2 = modelMapper.map(dto, MeetUs.class);
+				
+				if(dto.getImageBase64() != null || dto.getImageBase64().length() > 1) {
+				
+					String imagePathString = IoUtil.updateDecoder(dto.getImageBase64(),Meet2.getImagePath());
+					
+					Meet2.setImagePath(imagePathString);
+					
+				}
+				
 
 				return ResponseEntity.ok(new GeneralResponse(true,repo.save(Meet2),""));
 
@@ -98,6 +112,7 @@ public class MeetUsController {
 			Optional<MeetUs> Meet = repo.findById(id);
 			if(Meet.isPresent()) {
 				MeetUs Meet2 = Meet.get();
+				IoUtil.deleteFile(Meet2.getImagePath());
 				repo.delete(Meet2);
 				return ResponseEntity.ok(new GeneralResponse(true,null,""));
 

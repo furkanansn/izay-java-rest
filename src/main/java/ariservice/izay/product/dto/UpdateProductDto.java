@@ -9,7 +9,7 @@ public class UpdateProductDto {
 	private String name;
 	private String voltage;
 	private String serialNo;
-	private String imagePath;
+	private String imageBase64;
 	private String subTitleTr;
 	private String subTitleEn;
 	private String structureTr;

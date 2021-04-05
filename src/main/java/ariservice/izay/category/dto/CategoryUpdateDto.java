@@ -6,7 +6,7 @@ import lombok.Data;
 public class CategoryUpdateDto {
 	
 	private Long id;
-	private String imagePath;
+	private String imageBase64;
 	private String nameTr;
 	private String nameEn;
 	private String subTitleTr;

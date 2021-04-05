@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CategoryAddDto {
 
-	private String image;
+	private String imageBase64;
 	private String nameTr;
 	private String nameEn;
 	private String subTitleTr;

@@ -7,7 +7,7 @@ public class AddDocumentDto {
 	
 	private String nameTr;
 	private String nameEn;
-	private String imagePath;
-	private String pdfPath;
+	private String imageBase64;
+	private String pdfBase64;
 
 }

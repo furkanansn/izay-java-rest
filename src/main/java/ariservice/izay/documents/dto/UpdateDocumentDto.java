@@ -9,6 +9,6 @@ public class UpdateDocumentDto {
 	private String nameTr;
 	private String nameEn;
 	private String imagePath;
-	private String pdfPath;
+	private String pdfBase64;
 
 }

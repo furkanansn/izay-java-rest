@@ -1,5 +1,6 @@
 package ariservice.izay.category.serviceImpl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import ariservice.izay.category.dto.CategoryUpdateDto;
 import ariservice.izay.category.entity.Category;
 import ariservice.izay.category.repository.CategoryRepository;
 import ariservice.izay.category.service.CategoryService;
+import ariservice.izay.io.IoUtil;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -26,10 +28,13 @@ public class CategoryServiceImpl implements CategoryService{
 	
 	
 	@Override
-	public Category add(CategoryAddDto category) {
+	public Category add(CategoryAddDto category) throws IOException {
 		
 		Category category2 = modelMapper.map(category, Category.class);
 		
+		String imagePath = IoUtil.decoder(category.getImageBase64());
+		
+		category2.setImage(imagePath);
 		
 		Category resCategory = categoryRepository.save(category2);
 		
@@ -43,6 +48,8 @@ public class CategoryServiceImpl implements CategoryService{
 		
 		if(category.isPresent()) {
 			
+			IoUtil.deleteFile(category.get().getImage());
+			
 			categoryRepository.delete(category.get());
 			
 			return true;
@@ -54,15 +61,22 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
 	@Override
-	public Category update(CategoryUpdateDto category) {
+	public Category update(CategoryUpdateDto category) throws IOException {
 		
 		
 		Category category2 = categoryRepository.getOne(category.getId());
 		
 
+		if(category.getImageBase64() != null || category.getImageBase64().length() > 1) {
+			
+		String imagePath = IoUtil.updateDecoder(category.getImageBase64(), category2.getImage());
+		
+		category2.setImage(imagePath);
+
+		}
+		
 		category2.setDescriptionEn(category.getDescriptionEn());
 		category2.setDescriptionTr(category.getDescriptionTr());
-		category2.setImage(category.getImagePath());
 		category2.setNameEn(category.getNameEn());
 		category2.setNameTr(category.getNameTr());
 		category2.setSubTitleEn(category.getSubTitleEn());
@@ -78,29 +92,7 @@ public class CategoryServiceImpl implements CategoryService{
 	public Object getAll() {
 		
 		
-		List<Category> category = categoryRepository.findAll();
-		
-		/*
-		 * List<CategoryDto> categoryDto = new ArrayList();
-		 * 
-		 * for (Category category2 : category) {
-		 * 
-		 * CategoryDto cDto = new CategoryDto();
-		 * 
-		 * cDto.setDescriptionEn(category2.getDescriptionEn());
-		 * cDto.setDescriptionTr(category2.getDescriptionTr());
-		 * cDto.setImagePath(category2.getImagePath());
-		 * cDto.setNameEn(category2.getNameEn()); cDto.setNameTr(category2.getNameTr());
-		 * cDto.setSubTitleEn(category2.getSubTitleEn());
-		 * cDto.setSubTitleTr(category2.getSubTitleTr());
-		 * cDto.setProducs(category2.getProducts());
-		 * 
-		 * categoryDto.add(cDto); }
-		 */
-		
-		 //Arrays.asList(modelMapper.map(category, CategoryDto[].class));
-		
-		return category;
+		return categoryRepository.findAll();
 	}
 
 	@Override

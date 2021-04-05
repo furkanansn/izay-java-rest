@@ -13,7 +13,7 @@ public class MeetUsDto {
 	private String ourServiceEn;
 	private String ourInnovationTr;
 	private String ourInnovationEn;
-	private String imagePath;
+	private String imageBase64;
 	private String textTr;
 	private String textEn;
 

@@ -1,5 +1,6 @@
 package ariservice.izay.product.serviceImpl;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ariservice.izay.category.entity.Category;
 import ariservice.izay.category.repository.CategoryRepository;
+import ariservice.izay.io.IoUtil;
 import ariservice.izay.product.dto.AddProductCategory;
 import ariservice.izay.product.dto.AddProductDto;
 import ariservice.izay.product.dto.UpdateProductDto;
@@ -33,11 +35,13 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Product add(AddProductDto addProductDto) {
+	public Product add(AddProductDto addProductDto) throws IOException {
 		
 		Product product = modelMapper.map(addProductDto, Product.class);
 		
+		String imagePathString = IoUtil.decoder(addProductDto.getImageBase64());
 
+		product.setImagePath(imagePathString);
 		
 		return productRepository.save(product);
 		
@@ -50,6 +54,8 @@ public class ProductServiceImpl implements ProductService{
 		
 		if(product.isPresent()) {
 			
+			IoUtil.deleteFile(product.get().getImagePath());
+			
 			productRepository.delete(product.get());
 			
 			return true;
@@ -59,11 +65,20 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Product update(UpdateProductDto updateProductDto) {
+	public Product update(UpdateProductDto updateProductDto) throws IOException {
 		
 		Product product = productRepository.findById(updateProductDto.getId()).get();
 		
 		product = modelMapper.map(updateProductDto, Product.class);
+		
+		if(updateProductDto.getImageBase64() != null || updateProductDto.getImageBase64().length() > 1 ) {
+		
+			String imageString = IoUtil.updateDecoder(updateProductDto.getImageBase64(), product.getImagePath());
+			
+			product.setImagePath(imageString);
+			
+		}
+		
 		
 		return productRepository.save(product);
 	}

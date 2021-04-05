@@ -8,7 +8,7 @@ public class UpdateBlogDto {
 	private Long id;
 	private String nameTr;
 	private String nameEn;
-	private String imagePath;
+	private String imageBase64;
 	private String textTr;
 	private String textEn;
 

@@ -18,6 +18,7 @@ import ariservice.izay.documents.dto.AddDocumentDto;
 import ariservice.izay.documents.dto.UpdateDocumentDto;
 import ariservice.izay.documents.entity.Document;
 import ariservice.izay.documents.repository.DocumentRepository;
+import ariservice.izay.io.IoUtil;
 import ariservice.izay.security.JwtHelper;
 import ariservice.izay.util.ApiPaths;
 import ariservice.izay.util.GeneralResponse;
@@ -63,8 +64,20 @@ public class DocumentController {
 	ResponseEntity<GeneralResponse> addDocs(@RequestHeader(value = "Authorization", required = false)String token,@RequestBody AddDocumentDto addDocumentDto){
 		
 		try {
+			
 			String aString = jwtHelper.verifyJwt(token);
+			
 			Document document = modelMapper.map(addDocumentDto, Document.class);
+			
+			String imagePath = IoUtil.decoder(addDocumentDto.getImageBase64());
+			
+			String pdfPath = IoUtil.decoder(addDocumentDto.getPdfBase64());
+			
+			document.setImagePath(imagePath);
+			document.setPdfPath(pdfPath);
+			
+
+			
 			
 			return ResponseEntity.ok(new GeneralResponse(true,repo.save(document),""));
 			
@@ -86,8 +99,16 @@ public class DocumentController {
 
 			Optional<Document> document = repo.findById(dto.getId());
 			if(document.isPresent()) {
+				
 				Document document2 = document.get();
 				document2 = modelMapper.map(dto, Document.class);
+				
+				String imagePath = IoUtil.updateDecoder(dto.getImagePath(),document2.getImagePath());
+				
+				String pdfPath = IoUtil.updateDecoder(dto.getPdfBase64(),document2.getPdfPath());
+				
+				
+				
 
 				return ResponseEntity.ok(new GeneralResponse(true,repo.save(document2),""));
 
@@ -114,6 +135,9 @@ public class DocumentController {
 			Optional<Document> document = repo.findById(id);
 			if(document.isPresent()) {
 				Document document2 = document.get();
+				
+				IoUtil.deleteFile(document2.getImagePath());
+				IoUtil.deleteFile(document2.getPdfPath());
 				repo.delete(document2);
 				return ResponseEntity.ok(new GeneralResponse(true,null,""));
 

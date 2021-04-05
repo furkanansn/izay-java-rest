@@ -21,6 +21,7 @@ import ariservice.izay.category.entity.Category;
 import ariservice.izay.category.repository.CategoryRepository;
 import ariservice.izay.home.entity.Home;
 import ariservice.izay.home.repository.HomeRepository;
+import ariservice.izay.io.IoUtil;
 import ariservice.izay.security.JwtHelper;
 import ariservice.izay.util.ApiPaths;
 import ariservice.izay.util.GeneralResponse;
@@ -54,6 +55,11 @@ public class HomeController {
 		try {
 			String aString = jwtHelper.verifyJwt(token);
 			
+			String imagePathString = IoUtil.decoder(home.getMainImage());
+			
+			home.setMainImage(imagePathString);
+			
+			
 			
 			return ResponseEntity.ok(new GeneralResponse(true,repo.save(home),""));
 			
@@ -73,8 +79,14 @@ public class HomeController {
 		try {
 			String aString = jwtHelper.verifyJwt(token);
 
-		
-
+			if(dto.getMainImage() != null || dto.getMainImage().length() > 1) {
+				
+				String imagePathString = IoUtil.decoder(dto.getMainImage());
+				
+				dto.setMainImage(imagePathString);	
+			}
+			
+			
 				return ResponseEntity.ok(new GeneralResponse(true,repo.save(dto),""));
 
 		
@@ -97,6 +109,9 @@ public class HomeController {
 			Optional<Home> Homeument = repo.findById(id);
 			if(Homeument.isPresent()) {
 				Home Homeument2 = Homeument.get();
+				
+				IoUtil.deleteFile(Homeument2.getMainImage());
+				
 				repo.delete(Homeument2);
 				return ResponseEntity.ok(new GeneralResponse(true,null,""));
 
