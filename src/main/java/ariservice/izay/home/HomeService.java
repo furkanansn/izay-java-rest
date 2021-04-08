@@ -47,12 +47,25 @@ public class HomeService {
 		
 		List<CategoryDto> categoryDto = Arrays.asList(modelMapper.map(category, CategoryDto[].class));
 		
+		Object about = "null";
+		try {
+			about =  (homeRepository.findById((long) 1).get() == null) ? "null" : homeRepository.findById((long) 1).get();
+		} catch (Exception e) {
+			about = "null";
+		}
+		Object contact = "null";
+		try {
+			about = (meetUsRepository.findById((long) 1).get() == null) ? "null" : meetUsRepository.findById((long) 1).get();	
+		} catch (Exception e) {
+			about = "null";
+		}
+		
 
 		map.put("category", categoryDto);
-		map.put("about", homeRepository.findAll().get(0));
+		map.put("about", about);
 		map.put("document", documentRepository.findAll());
 		map.put("blog", blogRepository.findAll());
-		map.put("contact", meetUsRepository.findAll().get(0));
+		map.put("contact", contact);
 		
 		
 		return map;
