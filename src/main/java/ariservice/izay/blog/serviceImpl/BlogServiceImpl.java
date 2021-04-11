@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ariservice.izay.blog.repository.BlogRepository;
 import ariservice.izay.io.IoUtil;
 import ariservice.izay.util.GeneralService;
+import ariservice.izay.util.SlugUtil;
 import ariservice.izay.blog.dto.UpdateBlogDto;
 import ariservice.izay.blog.entity.Blog;
 
@@ -33,6 +34,8 @@ public class BlogServiceImpl implements GeneralService{
 		String imagePath = IoUtil.decoder(blog.getImagePath());
 		
 		blog.setImagePath(imagePath);
+		
+		blog.setSlug(SlugUtil.toSlug(blog.getNameTr()));
 		
 		return repo.save(blog);
 	}
@@ -70,7 +73,7 @@ public class BlogServiceImpl implements GeneralService{
 
 
 			}
-			
+			blog2.setSlug(SlugUtil.toSlug(blog2.getNameTr()));
 			
 			return repo.save(blog2);
 		}
@@ -91,6 +94,11 @@ public class BlogServiceImpl implements GeneralService{
 		
 		return repo.findById(id);
 		
+	}
+	
+	public Object getBySlug(String slug) {
+	
+		return repo.findBySlug(slug);
 	}
 
 }

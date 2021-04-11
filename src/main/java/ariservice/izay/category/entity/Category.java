@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import ariservice.izay.product.entity.Product;
 import ariservice.izay.util.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

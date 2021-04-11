@@ -122,7 +122,30 @@ public class BlogController {
 			Object okObject = impl.getById(id);
 			
 			if(okObject == null) {
-				return ResponseEntity.ok(new GeneralResponse(false,null,"Böyle bir kategori bulunamadı"));
+				return ResponseEntity.ok(new GeneralResponse(false,null,"Böyle bir Yazı bulunamadı"));
+			}
+			
+			
+			return ResponseEntity.ok(new GeneralResponse(true,okObject,""));
+			
+		} catch (Exception e) {
+			
+			String errorString = "BlogController on getBlog "  +  e.getMessage();
+			return ResponseEntity.ok(new GeneralResponse(false,null,errorString));
+			
+		}
+		
+	}
+	
+
+	@GetMapping("/getSlug")
+	ResponseEntity<GeneralResponse> getBlogBySlug(@RequestParam String slug){
+		try {
+			
+			Object okObject = impl.getBySlug(slug);
+			
+			if(okObject == null) {
+				return ResponseEntity.ok(new GeneralResponse(false,null,"Böyle bir Yazı bulunamadı"));
 			}
 			
 			

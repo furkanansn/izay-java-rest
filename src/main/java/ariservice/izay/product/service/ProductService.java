@@ -19,8 +19,12 @@ public interface ProductService {
 	
 	Object getById(Long id);
 	
+	Object getBySlug(String slug);
+	
 	Object addProductCategory(AddProductCategory addProductCategory);
 	
 	Object searchProduct(String query);
+	
+	
 	
 }

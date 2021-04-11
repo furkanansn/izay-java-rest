@@ -1,5 +1,6 @@
 package ariservice.izay.documents;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,7 @@ import ariservice.izay.io.IoUtil;
 import ariservice.izay.security.JwtHelper;
 import ariservice.izay.util.ApiPaths;
 import ariservice.izay.util.GeneralResponse;
+import ariservice.izay.util.SlugUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -73,6 +75,8 @@ public class DocumentController {
 			
 			String pdfPath = IoUtil.decoder(addDocumentDto.getPdfBase64());
 			
+			document.setSlug(SlugUtil.toSlug(document.getNameTr()));
+			
 			document.setImagePath(imagePath);
 			document.setPdfPath(pdfPath);
 			
@@ -107,7 +111,7 @@ public class DocumentController {
 				
 				String pdfPath = IoUtil.updateDecoder(dto.getPdfBase64(),document2.getPdfPath());
 				
-				
+				document2.setSlug(SlugUtil.toSlug(document2.getNameTr()));
 				
 
 				return ResponseEntity.ok(new GeneralResponse(true,repo.save(document2),""));
@@ -180,7 +184,30 @@ public class DocumentController {
 
 	}
 	
-	
+	@GetMapping("/getSlug")
+	ResponseEntity<GeneralResponse> getDocBySlug(@RequestParam String slug){
+		
+		try {
+			
+			Optional<List<Document>> document = Optional.ofNullable(repo.findBySlug(slug));
+			if(document.isPresent()) {
+				List<Document> document2 = document.get();
+				
+				return ResponseEntity.ok(new GeneralResponse(true,document2,""));
+
+			}else {
+				return ResponseEntity.ok(new GeneralResponse(false,null,"Böyle bir döküman bulunamadı"));
+
+			}
+			
+		} catch (Exception e) {
+			
+			String errorString = "DocsController on getDoc "  +  e.getMessage();
+			return ResponseEntity.ok(new GeneralResponse(false,null,errorString));
+		}
+		
+
+	}
 	
 
 }

@@ -12,6 +12,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 
 import ariservice.izay.util.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @SuppressWarnings("serial")
@@ -20,7 +21,7 @@ import lombok.Data;
 @Entity
 
 public class MeetUs extends BaseEntity implements Serializable{
-
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

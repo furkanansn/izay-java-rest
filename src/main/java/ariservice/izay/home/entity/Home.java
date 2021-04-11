@@ -12,6 +12,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 
 import ariservice.izay.util.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data

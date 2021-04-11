@@ -12,13 +12,14 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 
 import ariservice.izay.util.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 @Table(name = "blog")
 @Entity
 public class Blog extends BaseEntity implements Serializable{
-
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +44,8 @@ public class Blog extends BaseEntity implements Serializable{
 	@Lob
 	@Column(name = "text_en")
 	private String textEn;
+	
+	@Column(name = "slug")
+	private String slug;
 
 }

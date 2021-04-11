@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ariservice.izay.category.entity.Category;
 import ariservice.izay.util.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -75,6 +76,9 @@ public class Product extends BaseEntity implements Serializable{
 	
 	@Column(name = "technical_info_en")
 	private String technicalInfoEn;
+	
+	@Column(name = "slug")
+	private String slug;
 	
 
 

@@ -154,6 +154,28 @@ public class ProductController {
 		
 	}
 	
+	@GetMapping("/getSlug")
+	ResponseEntity<GeneralResponse> getProductBySlug(@RequestParam String slug){
+		try {
+			
+			Object okObject = impl.getBySlug(slug);
+			
+			if(okObject == null) {
+				return ResponseEntity.ok(new GeneralResponse(false,null,"Böyle bir ürün bulunamadı"));
+			}
+			
+			
+			return ResponseEntity.ok(new GeneralResponse(true,okObject,""));
+			
+		} catch (Exception e) {
+			
+			String errorString = "ProductController on getProduct "  +  e.getMessage();
+			return ResponseEntity.ok(new GeneralResponse(false,null,errorString));
+			
+		}
+		
+	}
+	
 	@GetMapping("/search")
 	ResponseEntity<GeneralResponse> searchProducts(@RequestParam String query){
 		try {

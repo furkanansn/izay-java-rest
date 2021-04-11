@@ -23,6 +23,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 	
 	List<Product> searchProduct(@Param("query") String query);
 	
+	List<Product> findBySlug(String slug);
+	
 	
 	
 	

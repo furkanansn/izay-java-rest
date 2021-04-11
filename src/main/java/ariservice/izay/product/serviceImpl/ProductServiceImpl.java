@@ -1,5 +1,7 @@
 package ariservice.izay.product.serviceImpl;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +19,7 @@ import ariservice.izay.product.entity.Product;
 import ariservice.izay.product.repository.ProductRepository;
 import ariservice.izay.product.service.ProductService;
 import ariservice.izay.util.CombineDto;
+import ariservice.izay.util.SlugUtil;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -42,6 +45,8 @@ public class ProductServiceImpl implements ProductService{
 		String imagePathString = IoUtil.decoder(addProductDto.getImageBase64());
 
 		product.setImagePath(imagePathString);
+		
+		product.setSlug(SlugUtil.toSlug(product.getName()));
 		
 		return productRepository.save(product);
 		
@@ -79,6 +84,8 @@ public class ProductServiceImpl implements ProductService{
 			
 		}
 		
+		product.setSlug(SlugUtil.toSlug(product.getName()));
+
 		
 		return productRepository.save(product);
 	}
@@ -131,6 +138,17 @@ public class ProductServiceImpl implements ProductService{
 		
 		if(products.isPresent()) {
 			return products;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public Object getBySlug(String slug) {
+		
+		Optional<List<Product>> productsOptional = Optional.ofNullable(productRepository.findBySlug(slug));
+		if(productsOptional.isPresent()) {
+			return productsOptional;
 		}
 		
 		return null;
