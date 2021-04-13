@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ariservice.izay.product.dto.AddIconDto;
 import ariservice.izay.product.dto.AddProductCategory;
 import ariservice.izay.product.dto.AddProductDto;
 import ariservice.izay.product.dto.UpdateProductDto;
@@ -66,9 +67,6 @@ public class ProductController {
 			return ResponseEntity.ok(new GeneralResponse(false,null,errorString));
 			
 		}
-		
-		
-	
 	}
 	
 	@PostMapping("/addProductCategory")
@@ -198,5 +196,47 @@ public class ProductController {
 		
 	}
 	
+	
+	@GetMapping("/icons")
+	ResponseEntity<GeneralResponse> getIcons(){
+		try {
+			return ResponseEntity.ok(new GeneralResponse(true,impl.getIcons(),""));
+		} catch (Exception e) {
+			String errorString = "ProductController on getIcons "  +  e.getMessage();
+			return ResponseEntity.ok(new GeneralResponse(false,null,errorString));
+		}
+	}
+	
+	@PostMapping("/addIcons")
+	ResponseEntity<GeneralResponse> addIcons(@RequestHeader(value = "Authorization", required = false)String token,@RequestBody AddIconDto aDto){
+		
+		try {
+			String aString = jwtHelper.verifyJwt(token);
+
+			return ResponseEntity.ok(new GeneralResponse(true,impl.addIcon(aDto),""));
+			
+		} catch (Exception e) {
+			
+			String errorString = "ProductController on addIcons "  +  e.getMessage();
+			return ResponseEntity.ok(new GeneralResponse(false,null,errorString));
+			
+		}
+	}
+	
+	@GetMapping("/deleteIcons")
+	ResponseEntity<GeneralResponse> deleteIcons(@RequestHeader(value = "Authorization", required = false)String token,@RequestParam Long id){
+		
+		try {
+			String aString = jwtHelper.verifyJwt(token);
+
+			return ResponseEntity.ok(new GeneralResponse(true,impl.deleteIcon(id),""));
+			
+		} catch (Exception e) {
+			
+			String errorString = "ProductController on deleteIcons "  +  e.getMessage();
+			return ResponseEntity.ok(new GeneralResponse(false,null,errorString));
+			
+		}
+	}
 	
 }

@@ -28,14 +28,24 @@ public class ShowFile {
             		dir.getAbsolutePath() 
             		+ File.separator 
             		+ filename));
+            
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        if(filename.contains("jpg") || filename.contains("png") || filename.contains("jpeg")) {
+        if(filename.contains("png")) {
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
 	
         }
+        else if(filename.contains("jpg") || filename.contains("jpeg")) {
+        	return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+        }
+        else if(filename.contains("svg") ) {
+        	return ResponseEntity.ok().contentType(MediaType.APPLICATION_XML).body(image);
+        }
+       
+        
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(image);
 
         

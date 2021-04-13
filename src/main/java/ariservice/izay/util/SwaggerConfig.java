@@ -24,7 +24,7 @@ public class SwaggerConfig {
 				.description("From Bee Creative")
 				.build();
 		
-        return new Docket(DocumentationType.OAS_30)
+        return new Docket(DocumentationType.SWAGGER_2)
         		.apiInfo(apiInfo)
                 .select()                
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))

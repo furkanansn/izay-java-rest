@@ -98,6 +98,9 @@ public class IoUtil {
 		    case "data:image/png;base64":
 		        extension = ".png";
 		        break;
+		    case "data:image/svg+xml;base64":
+		    	extension = ".svg";
+		    	break;
 		    default:
 		        extension = ".pdf";
 		        break;

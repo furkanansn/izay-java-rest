@@ -1,19 +1,29 @@
 package ariservice.izay.product.serviceImpl;
 
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import ariservice.izay.category.entity.Category;
 import ariservice.izay.category.repository.CategoryRepository;
 import ariservice.izay.io.IoUtil;
+import ariservice.izay.product.dto.AddIconDto;
 import ariservice.izay.product.dto.AddProductCategory;
 import ariservice.izay.product.dto.AddProductDto;
+import ariservice.izay.product.dto.IconId;
 import ariservice.izay.product.dto.UpdateProductDto;
+import ariservice.izay.product.entity.Icons;
 import ariservice.izay.product.entity.Product;
+import ariservice.izay.product.repository.IconRepository;
 import ariservice.izay.product.repository.ProductRepository;
 import ariservice.izay.product.service.ProductService;
 import ariservice.izay.util.CombineDto;
@@ -24,21 +34,25 @@ public class ProductServiceImpl implements ProductService{
 	
 	private final ProductRepository productRepository;
 	private final CategoryRepository categoryRepository;
+	private final IconRepository iconRepository;
 	private final ModelMapper modelMapper;
 
 	
-	public ProductServiceImpl(ProductRepository productRepository,CategoryRepository categoryRepository,ModelMapper modelMapper) {
+	public ProductServiceImpl(ProductRepository productRepository,CategoryRepository categoryRepository,ModelMapper modelMapper,IconRepository iconRepository) {
 		super();
 		this.productRepository = productRepository;
 		this.categoryRepository = categoryRepository;
 		this.modelMapper = modelMapper;
+		this.iconRepository = iconRepository;
 
 	}
 
 	@Override
 	public Product add(AddProductDto addProductDto) throws IOException {
 		
-		Product product = modelMapper.map(addProductDto, Product.class);
+		Product product = new Product();
+		product = modelMapper.map(addProductDto, Product.class);
+		
 		
 		String imagePathString = IoUtil.decoder(addProductDto.getImageBase64());
 
@@ -46,6 +60,17 @@ public class ProductServiceImpl implements ProductService{
 		
 		product.setSlug(SlugUtil.toSlug(product.getName()));
 		
+		
+		
+		List<IconId> iconIds = addProductDto.getIcons();
+		Set<Icons> iconsList = new HashSet<Icons>();
+		for (IconId iconId : iconIds) {
+			
+			Icons icons = iconRepository.findById(iconId.getId()).get();
+			iconsList.add(icons);
+		}
+		product.setIconsOfProduct(iconsList);
+			
 		return productRepository.save(product);
 		
 	}
@@ -83,6 +108,16 @@ public class ProductServiceImpl implements ProductService{
 		}
 		
 		product.setSlug(SlugUtil.toSlug(product.getName()));
+		
+		List<IconId> iconIds = updateProductDto.getIcons();
+		
+		Set<Icons> iconsList = new HashSet<Icons>();
+		for (IconId iconId : iconIds) {
+			
+			Icons icons = iconRepository.findById(iconId.getId()).get();
+			iconsList.add(icons);
+		}
+		product.setIconsOfProduct(iconsList);
 
 		
 		return productRepository.save(product);
@@ -151,5 +186,32 @@ public class ProductServiceImpl implements ProductService{
 		
 		return null;
 	}
+	
+	public Object addIcon(AddIconDto icons) throws IOException {
+		
+		String svgPathString = IoUtil.decoder(icons.getSvg());
+		
+		Icons iconEntity = new Icons();
+		iconEntity.setImagePath(svgPathString);
+		iconEntity.setName(icons.getName());
+		iconRepository.save(iconEntity);	
+		return iconEntity;
+	}
+	
+	public Object deleteIcon(Long id) {
+		
+		Optional<Icons> icons = iconRepository.findById(id);
+		if(icons.isPresent()) {
+			iconRepository.delete(icons.get());
+		}
+		return "Ok";
+		
+	}
+	
+	public Object getIcons() {
+		return iconRepository.findAll();
+	}
+	
+	
 
 }
