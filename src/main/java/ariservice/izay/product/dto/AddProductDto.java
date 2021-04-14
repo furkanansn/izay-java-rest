@@ -19,8 +19,8 @@ public class AddProductDto {
 	private String testVoltage;
 	private String iletkenTipiTr;
 	private String iletkenTipiEn;
-	private String sınıfıTr;
-	private String sınıfıEn;
+	private String sinifiTr;
+	private String sinifiEn;
 	private String yalitimKaplamaTr;	
 	private String yalitimKaplamaEn;
 	private String kilifTr;

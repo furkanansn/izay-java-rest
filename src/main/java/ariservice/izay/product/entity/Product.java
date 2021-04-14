@@ -76,11 +76,11 @@ public class Product extends BaseEntity implements Serializable{
 	@Column(name = "iletkenTipiEn")
 	private String iletkenTipiEn;
 	
-	@Column(name = "sınıfıTr")
-	private String sınıfıTr;
+	@Column(name = "sinifiTr")
+	private String sinifiTr;
 	
-	@Column(name = "sınıfıEn")
-	private String sınıfıEn;
+	@Column(name = "sinifiEn")
+	private String sinifiEn;
 
 	@Column(name = "yalitimKaplamaTr")
 	private String yalitimKaplamaTr;
