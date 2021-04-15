@@ -16,8 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 			+ "OR p.serial_no LIKE %:query%\n"
 			+ "OR p.sub_title_tr LIKE %:query%\n"
 			+ "OR p.sub_title_en LIKE %:query%\n"
-			+ "OR p.structure_tr LIKE %:query%\n"
-			+ "OR p.structure_en LIKE %:query%\n"
 			+ "OR p.technical_info_tr LIKE %:query%\n"
 			+ "OR p.technical_info_en LIKE %:query%",nativeQuery = true)
 	

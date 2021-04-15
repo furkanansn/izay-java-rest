@@ -54,12 +54,13 @@ public class Product extends BaseEntity implements Serializable{
 	
 	@Column(name = "sub_title_en")
 	private String subTitleEn;
-	
-	@Column(name = "structure_en")
-	private String structureEn;
+
 	
 	@Column(name = "technical_info_en")
 	private String technicalInfoEn;
+	
+	@Column(name = "technical_info_tr")
+	private String technicalInfoTr;
 	
 	@Column(name = "slug")
 	private String slug;
