@@ -16,7 +16,7 @@ import java.io.IOException;
 public class ShowFile {
 
 		
-	String rootPath = System.getProperty("catalina.home");
+	String rootPath = "/var";
     File dir = new File(rootPath + File.separator + "files");
 	
     @GetMapping("/{filename}")

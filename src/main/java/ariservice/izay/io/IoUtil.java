@@ -9,7 +9,7 @@ import java.util.Base64;
 
 public class IoUtil {
 	
-	private static String rootPath = System.getProperty("catalina.home");
+	private static String rootPath = "/var";
 
 
 	public static String decoder(String base64Image) throws IOException {
