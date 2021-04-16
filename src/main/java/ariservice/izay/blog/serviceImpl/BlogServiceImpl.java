@@ -62,16 +62,20 @@ public class BlogServiceImpl implements GeneralService{
 		
 		if (blog.isPresent()) {
 			Blog blog2 = blog.get();
+			String pathString = blog2.getImagePath();
 			blog2 = modelMapper.map(object, Blog.class);
 			
 			UpdateBlogDto updateBlogDto = (UpdateBlogDto) object;
 			
-			if(updateBlogDto.getImageBase64() != null || !updateBlogDto.getImageBase64().isEmpty()) {
+			if(!updateBlogDto.getImageBase64().isEmpty()) {
 				
 				String imagePath = IoUtil.updateDecoder(updateBlogDto.getImageBase64(),blog2.getImagePath());
 				blog2.setImagePath(imagePath);
 
 
+			}
+			else {
+				blog2.setImagePath(pathString);
 			}
 			blog2.setSlug(SlugUtil.toSlug(blog2.getNameTr()));
 			

@@ -20,7 +20,7 @@ import org.json.JSONObject;
 public class SecurityJwt {
 	
 	
-	private static final String SECRET_KEY = "ARIKARINCA"; //@TODO Add Signature here
+	private static final String SECRET_KEY = "DSKLFSAJDFKJk324827384123-121!213ldflkldsf.!.:;"; //@TODO Add Signature here
     @SuppressWarnings("unused")
 	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     private static final String ISSUER = "ari.karinca.net";

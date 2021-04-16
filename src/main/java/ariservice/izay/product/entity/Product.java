@@ -119,12 +119,12 @@ public class Product extends BaseEntity implements Serializable{
 	@Column(name = "nerelerdeKullanilirEn")
 	private String nerelerdeKullanilirEn;
 	
-	@ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH},fetch = FetchType.LAZY)
 	@JoinTable(name = "icon_product",joinColumns = @JoinColumn(name="product_id",referencedColumnName = "id"),
 	inverseJoinColumns = @JoinColumn(name="icon_id",referencedColumnName = "id"))
 	private Set<Icons> iconsOfProduct;
 	
-	@ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH},fetch = FetchType.LAZY)
 	@JoinTable(name = "category_product",joinColumns = @JoinColumn(name="product_id",referencedColumnName = "id"),
 	inverseJoinColumns = @JoinColumn(name="category_id",referencedColumnName = "id"))
 	private Set<Category> categories;

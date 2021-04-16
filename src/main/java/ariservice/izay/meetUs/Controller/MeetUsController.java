@@ -42,29 +42,29 @@ public class MeetUsController {
 	}
 
 
-	
-	@PostMapping("/add")
-	ResponseEntity<GeneralResponse> addMeet(@RequestHeader(value = "Authorization", required = false)String token,@RequestBody AddMeetUsDto addMeetDto){
-		
-		try {
-			String aString = jwtHelper.verifyJwt(token);
-
-			MeetUs Meet = modelMapper.map(addMeetDto, MeetUs.class);
-			
-			String imagePathString = IoUtil.decoder(addMeetDto.getImageBase64());
-			
-			Meet.setImagePath(imagePathString);
-			
-			return ResponseEntity.ok(new GeneralResponse(true,repo.save(Meet),""));
-			
-		} catch (Exception e) {
-			
-			String errorString = "MeetController on addMeet "  +  e.getMessage();
-			return ResponseEntity.ok(new GeneralResponse(false,null,errorString));
-		}
-		
-
-	}
+	/*
+	 * @PostMapping("/add") ResponseEntity<GeneralResponse>
+	 * addMeet(@RequestHeader(value = "Authorization", required = false)String
+	 * token,@RequestBody AddMeetUsDto addMeetDto){
+	 * 
+	 * try { String aString = jwtHelper.verifyJwt(token);
+	 * 
+	 * MeetUs Meet = modelMapper.map(addMeetDto, MeetUs.class);
+	 * 
+	 * String imagePathString = IoUtil.decoder(addMeetDto.getImageBase64());
+	 * 
+	 * Meet.setImagePath(imagePathString);
+	 * 
+	 * return ResponseEntity.ok(new GeneralResponse(true,repo.save(Meet),""));
+	 * 
+	 * } catch (Exception e) {
+	 * 
+	 * String errorString = "MeetController on addMeet " + e.getMessage(); return
+	 * ResponseEntity.ok(new GeneralResponse(false,null,errorString)); }
+	 * 
+	 * 
+	 * }
+	 */
 	
 	
 	@PostMapping("/update")
@@ -76,14 +76,18 @@ public class MeetUsController {
 			Optional<MeetUs> Meet = repo.findById(dto.getId());
 			if(Meet.isPresent()) {
 				MeetUs Meet2 = Meet.get();
+				String paString = Meet2.getImagePath();
 				Meet2 = modelMapper.map(dto, MeetUs.class);
 				
-				if(dto.getImageBase64() != null || dto.getImageBase64().length() > 1) {
+				if(!dto.getImageBase64().isEmpty()) {
 				
 					String imagePathString = IoUtil.updateDecoder(dto.getImageBase64(),Meet2.getImagePath());
 					
 					Meet2.setImagePath(imagePathString);
 					
+				}
+				else {
+					Meet2.setImagePath(paString);
 				}
 				
 

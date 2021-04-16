@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import ariservice.izay.category.entity.Category;
 import ariservice.izay.category.repository.CategoryRepository;
 import ariservice.izay.io.IoUtil;
@@ -95,17 +94,22 @@ public class ProductServiceImpl implements ProductService{
 		
 		Product product = productRepository.findById(updateProductDto.getId()).get();
 		
+		String pathString = product.getImagePath();
+		
 		product = modelMapper.map(updateProductDto, Product.class);
 		
-		if(updateProductDto.getImageBase64() != null || updateProductDto.getImageBase64().length() > 1 ) {
+		if(!updateProductDto.getImageBase64().isEmpty()) {
 		
 			String imageString = IoUtil.updateDecoder(updateProductDto.getImageBase64(), product.getImagePath());
 			
 			product.setImagePath(imageString);
 			
+		}else {
+			product.setImagePath(pathString);
 		}
 		
 		product.setSlug(SlugUtil.toSlug(product.getName()));
+		
 		
 		List<IconId> iconIds = updateProductDto.getIcons();
 		
@@ -200,7 +204,16 @@ public class ProductServiceImpl implements ProductService{
 		
 		Optional<Icons> icons = iconRepository.findById(id);
 		if(icons.isPresent()) {
-			iconRepository.delete(icons.get());
+			
+			Icons resIcons = icons.get();
+			
+			Set<Product> products = resIcons.getProducts();
+			products.forEach(prod ->
+			prod.getIconsOfProduct()
+			        .removeIf(r -> r.getId() == resIcons.getId()));
+			products.clear();
+			
+			iconRepository.delete(resIcons);
 		}
 		return "Ok";
 		

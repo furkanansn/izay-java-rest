@@ -3,6 +3,7 @@ package ariservice.izay.category.serviceImpl;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import ariservice.izay.category.entity.Category;
 import ariservice.izay.category.repository.CategoryRepository;
 import ariservice.izay.category.service.CategoryService;
 import ariservice.izay.io.IoUtil;
+import ariservice.izay.product.entity.Product;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -48,9 +50,21 @@ public class CategoryServiceImpl implements CategoryService{
 		
 		if(category.isPresent()) {
 			
+			Category resCategory = category.get();
+			
 			IoUtil.deleteFile(category.get().getImage());
 			
-			categoryRepository.delete(category.get());
+			
+			Set<Product> products = resCategory.getProducts();
+			
+			products.forEach(prod ->
+				
+			prod.getCategories().removeIf(c -> c.getId() == resCategory.getId()));
+			
+			products.clear();
+			
+			
+			categoryRepository.delete(resCategory);
 			
 			return true;
 			
@@ -67,7 +81,7 @@ public class CategoryServiceImpl implements CategoryService{
 		Category category2 = categoryRepository.getOne(category.getId());
 		
 
-		if(category.getImageBase64() != null || category.getImageBase64().length() > 1) {
+		if(!category.getImageBase64().isEmpty()) {
 			
 		String imagePath = IoUtil.updateDecoder(category.getImageBase64(), category2.getImage());
 		

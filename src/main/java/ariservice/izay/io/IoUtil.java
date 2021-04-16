@@ -6,10 +6,18 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Base64;
 
+import org.apache.commons.io.FileUtils;
+
 
 public class IoUtil {
 	
-	private static String rootPath = "/var";
+	private static String rootPath = null;
+	
+	
+	@SuppressWarnings("static-access")
+	public IoUtil(String rootPath) {
+			this.rootPath = rootPath;
+	}
 
 
 	public static String decoder(String base64Image) throws IOException {
@@ -109,6 +117,21 @@ public class IoUtil {
 		return extension;
 		
 	}
+	
+	  public byte[] generateResponseFile(String rootPath,String filename) throws
+	  IOException {
+	  
+	  File dir = new File(rootPath + File.separator + "files");
+	  
+	  byte[] image = new byte[0];
+	  
+	  image = FileUtils.readFileToByteArray( new File( dir.getAbsolutePath() +
+	  File.separator + filename));
+	  
+	  return image;
+	  
+	  }
+	 
 	
 }
 

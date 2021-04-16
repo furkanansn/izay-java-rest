@@ -41,7 +41,46 @@ public class JwtHelper {
 		    
 		}
 		
-		return incomingToken.getAudience().get(0) + " " + incomingToken.getSubject();
+		return incomingToken.getAudience().get(0);
+		
+	}
+	
+	public String buildJwtWithRole(String role, int expireTime) {
+	
+		
+		JSONObject jwtPayload = new JSONObject();
+		jwtPayload.put("status", 0);
+
+		JSONArray audArray = new JSONArray();
+		audArray.put(role); 
+		jwtPayload.put("sub", "anşin");
+
+		jwtPayload.put("aud", audArray);
+		LocalDateTime ldt = LocalDateTime.now().plusDays(expireTime);
+		jwtPayload.put("exp", ldt.toEpochSecond(ZoneOffset.UTC)); //this needs to be configured
+		        
+		String token = new SecurityJwt(jwtPayload).toString();
+		
+		return token;
+		
+	}
+	
+	public String verifyJwtWithRole(String bearerToken,String role) throws NoSuchAlgorithmException {
+		
+		String tokenString = bearerToken.substring(bearerToken.lastIndexOf(" ") + 1);
+		
+		SecurityJwt incomingToken = new SecurityJwt(tokenString);
+		if (!incomingToken.isValid()) {
+		    
+		    return null;
+		    
+		}
+		else if(incomingToken.getAudience().get(0).contains(role)) {
+			return incomingToken.getAudience().get(0);
+		}
+		
+		
+		return null;
 		
 	}
 
