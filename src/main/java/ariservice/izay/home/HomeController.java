@@ -79,7 +79,7 @@ public class HomeController {
 		try {
 			String aString = jwtHelper.verifyJwt(token);
 
-			if(dto.getMainImage() != null || dto.getMainImage().length() > 1) {
+			if(!dto.getMainImage().isEmpty()) {
 				
 				String imagePathString = IoUtil.decoder(dto.getMainImage());
 				

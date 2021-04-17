@@ -62,14 +62,12 @@ public class AuthController {
 	ResponseEntity<Boolean> checkJwt(@RequestParam String jwt) throws NoSuchAlgorithmException{
 		
 		try {
+			
 			JwtHelper jwtHelper = new JwtHelper();
+			
 			String aString = jwtHelper.verifyJwt(jwt);
 			
 
-			if(aString ==null) {
-				return ResponseEntity.ok(false);
-	
-			}
 			return ResponseEntity.ok(true);
 			
 		} catch (Exception e) {

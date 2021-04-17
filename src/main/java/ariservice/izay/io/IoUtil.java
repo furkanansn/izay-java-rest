@@ -11,13 +11,9 @@ import org.apache.commons.io.FileUtils;
 
 public class IoUtil {
 	
-	private static String rootPath = null;
+	private static String rootPath = "/var";
 	
 	
-	@SuppressWarnings("static-access")
-	public IoUtil(String rootPath) {
-			this.rootPath = rootPath;
-	}
 
 
 	public static String decoder(String base64Image) throws IOException {
